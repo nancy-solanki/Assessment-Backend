@@ -4,7 +4,7 @@ from typing import Dict, Any
 from django.utils import timezone
 from django.db.models import Sum, Count, Value, QuerySet
 from django.db.models.functions import Coalesce, TruncDate
-from django.contrib.postgres.aggregates import ArrayAgg
+from django.contrib.postgres.aggregates import ArrayAgg, JSONBAgg
 
 from apps.meals.utils import fill_trends_gaps, calculate_trends_stats
 
@@ -24,7 +24,7 @@ class MealSummaryService:
             total_carbs=Coalesce(Sum("carbs_g"), Value(0)),
             total_fat=Coalesce(Sum("fat_g"), Value(0)),
             meal_names=Coalesce(ArrayAgg("name", distinct=True), Value([])),
-            tags_agg=Coalesce(ArrayAgg("tags"), Value([])),
+            tags_agg=Coalesce(JSONBAgg("tags"), Value([])),
         )
 
         # Flatten list of lists for tags_agg and query unique tag labels
