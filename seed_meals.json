@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Oatmeal with Berries",
+    "calories": 350,
+    "protein_g": 12,
+    "carbs_g": 60,
+    "fat_g": 6,
+    "tags": ["vegetarian", "vegan", "snack"],
+    "eaten_at": "2026-07-15T08:00:00Z"
+  },
+  {
+    "name": "Grilled Chicken Salad",
+    "calories": 450,
+    "protein_g": 40,
+    "carbs_g": 15,
+    "fat_g": 12,
+    "tags": ["high-protein", "low-carb"],
+    "eaten_at": "2026-07-15T13:00:00Z"
+  },
+  {
+    "name": "Scrambled Eggs with Avocado",
+    "calories": 380,
+    "protein_g": 18,
+    "carbs_g": 5,
+    "fat_g": 28,
+    "tags": ["vegetarian", "high-protein", "low-carb"],
+    "eaten_at": "2026-07-15T09:30:00Z"
+  },
+  {
+    "name": "Protein Shake",
+    "calories": 250,
+    "protein_g": 30,
+    "carbs_g": 10,
+    "fat_g": 3,
+    "tags": ["vegetarian", "high-protein", "snack"],
+    "eaten_at": "2026-07-15T16:00:00Z"
+  },
+  {
+    "name": "Salmon with Quinoa",
+    "calories": 600,
+    "protein_g": 42,
+    "carbs_g": 45,
+    "fat_g": 22,
+    "tags": ["high-protein"],
+    "eaten_at": "2026-07-15T20:00:00Z"
+  }
+]
