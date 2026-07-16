@@ -15,6 +15,12 @@ uv run python manage.py collectstatic --noinput
 echo "Seeding meals database..."
 uv run python manage.py seed_meals
 
+# Create superuser if environment variables are set
+if [ -n "$DJANGO_SUPERUSER_USERNAME" ] && [ -n "$DJANGO_SUPERUSER_PASSWORD" ]; then
+    echo "Creating superuser..."
+    uv run python manage.py createsuperuser --noinput || echo "Superuser already exists or could not be created."
+fi
+
 if [ $# -eq 0 ]; then
     echo "Starting Gunicorn server on port ${PORT:-8000}..."
     exec uv run gunicorn \
