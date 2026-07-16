@@ -90,11 +90,22 @@ class MealTrendsView(views.APIView):
     """
 
     def get(self, request, *args, **kwargs):
-        try:
-            days = int(request.query_params.get("days", 7))
-            if days <= 0:
-                days = 7
-        except ValueError:
+        # Validate days parameter
+        days_str = request.query_params.get("days")
+        if days_str is not None:
+            try:
+                days = int(days_str)
+                if days < 1 or days > 30:
+                    return Response(
+                        {"error": "days parameter must be between 1 and 30."},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+            except ValueError:
+                return Response(
+                    {"error": "days parameter must be a valid integer."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        else:
             days = 7
 
         try:

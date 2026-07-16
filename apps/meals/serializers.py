@@ -80,7 +80,8 @@ class MealSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         # Perform cross-field duplicate guard
-        # A meal with the same name (stripped) and eaten_at already exists
+        # A meal with the same normalized name (lowercase, trimmed, collapsed spaces)
+        # whose eaten_at is within ±30 minutes of attrs.eaten_at already exists.
         name = attrs.get("name")
         eaten_at = attrs.get("eaten_at")
 
@@ -88,11 +89,27 @@ class MealSerializer(serializers.ModelSerializer):
         instance = self.instance
 
         if name and eaten_at:
-            duplicate_query = Meal.objects.filter(name=name, eaten_at=eaten_at)
+            import datetime
+            # Normalize target name: lowercase, strip, collapse spaces
+            normalized_name = " ".join(name.strip().lower().split())
+
+            # Query meals in timezone-aware window: ±30 minutes
+            start_time = eaten_at - datetime.timedelta(minutes=30)
+            end_time = eaten_at + datetime.timedelta(minutes=30)
+
+            duplicate_query = Meal.objects.filter(
+                eaten_at__range=(start_time, end_time)
+            )
+
+            # Exclude current instance if it's an update operation
             if instance:
                 duplicate_query = duplicate_query.exclude(id=instance.id)
 
-            if duplicate_query.exists():
-                raise DuplicateMealException()
+            # Check normalized match in Python to avoid raw SQL or database-specific functions
+            for meal in duplicate_query:
+                db_normalized = " ".join(meal.name.strip().lower().split())
+                if db_normalized == normalized_name:
+                    raise DuplicateMealException()
 
         return attrs
+

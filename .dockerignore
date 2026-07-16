@@ -1,0 +1,10 @@
+.env
+.env.local
+.env.production
+.venv/
+.git/
+__pycache__/
+*.pyc
+staticfiles/
+db.sqlite3
+*.db

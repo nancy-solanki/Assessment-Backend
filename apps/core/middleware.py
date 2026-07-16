@@ -29,3 +29,4 @@ class RequestLoggingMiddleware:
         logger.info(log_message)
 
         return response
+
