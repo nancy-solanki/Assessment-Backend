@@ -15,5 +15,13 @@ uv run python manage.py collectstatic --noinput
 echo "Seeding meals database..."
 uv run python manage.py seed_meals
 
-echo "Starting command: $@"
-exec "$@"
+if [ $# -eq 0 ]; then
+    echo "Starting Gunicorn server on port ${PORT:-8000}..."
+    exec uv run gunicorn \
+        --bind "0.0.0.0:${PORT:-8000}" \
+        --workers 3 \
+        config.wsgi:application
+else
+    echo "Starting command: $@"
+    exec "$@"
+fi

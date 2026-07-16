@@ -37,7 +37,6 @@ RUN chmod +x entrypoint.sh
 # Expose Django port
 EXPOSE 8000
 
-# Set entrypoint and default CMD using production Gunicorn server
+# Set entrypoint (which defaults to starting Gunicorn if no command is override)
 ENTRYPOINT ["/app/entrypoint.sh"]
-CMD ["uv", "run", "gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "config.wsgi:application"]
 
