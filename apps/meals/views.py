@@ -1,4 +1,5 @@
 from django.utils import timezone
+from django.conf import settings
 from rest_framework import generics, views, status
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
@@ -97,9 +98,12 @@ class MealTrendsView(views.APIView):
             days = 7
 
         try:
-            goal = int(request.query_params.get("goal", 2000))
+            goal = int(request.query_params.get("goal", settings.DAILY_GOAL_KCAL))
+            if goal < 0:
+                goal = settings.DAILY_GOAL_KCAL
         except ValueError:
-            goal = 2000
+            goal = settings.DAILY_GOAL_KCAL
+
 
         queryset = Meal.objects.all()
         # Filter queryset by search strings / tags first

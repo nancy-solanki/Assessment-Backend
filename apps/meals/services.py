@@ -2,6 +2,7 @@ import datetime
 from typing import Dict, Any
 
 from django.utils import timezone
+from django.conf import settings
 from django.db.models import Sum, Count, Value, QuerySet
 from django.db.models.functions import Coalesce, TruncDate
 from django.contrib.postgres.aggregates import ArrayAgg, JSONBAgg
@@ -37,15 +38,20 @@ class MealSummaryService:
                         unique_tags_set.add(tag)
         unique_tags = sorted(list(unique_tags_set))
 
+        total_calories = summary["total_calories"]
+
         return {
             "total_meals": summary["total_meals"],
-            "total_calories": summary["total_calories"],
+            "total_calories": total_calories,
             "total_protein": summary["total_protein"],
             "total_carbs": summary["total_carbs"],
             "total_fat": summary["total_fat"],
             "meal_names": summary["meal_names"] or [],
             "unique_tags": unique_tags,
+            "goal_kcal": settings.DAILY_GOAL_KCAL,
+            "remaining_kcal": settings.DAILY_GOAL_KCAL - total_calories,
         }
+
 
 
 class MealTrendsService:
